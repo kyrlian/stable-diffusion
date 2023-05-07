@@ -14,3 +14,4 @@ pip3 install torch torchvision torchaudio --index-url https://download.pytorch.o
 - [stable-diffusion-2-1](https://huggingface.co/stabilityai/stable-diffusion-2-1)
 - [stable-diffusion-x4-upscaler](https://huggingface.co/stabilityai/stable-diffusion-x4-upscaler)
 - [Effective and efficient diffusion](https://huggingface.co/docs/diffusers/stable_diffusion)
+- [Prompt Templates for Stable Diffusion](https://github.com/Dalabad/stable-diffusion-prompt-templates)
