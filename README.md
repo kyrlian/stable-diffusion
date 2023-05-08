@@ -1,5 +1,18 @@
 # stable diffusion
 
+## Optional - venv
+
+Create and activate python virtual env
+```
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+to deactivate the virutal env:
+```
+deactivate
+```
+
 ## Install
 ```
 pip install -r requirements
@@ -10,7 +23,22 @@ pip install -r requirements
 pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu117
 ```
 
+## Run
+```
+python.exe .\stablediffusion-cli.py
+```
+
+## Uninstall
+
+On windows, huggingface models are stored in:
+```
+C:\Users\<user>\.cache\huggingface
+```
+
 ## Ressources
+
+### Python venv
+- [venv — Creation of virtual environments](https://docs.python.org/3/library/venv.html)
 
 ### Models - stable diffusion
 - [stable-diffusion-2-1](https://huggingface.co/stabilityai/stable-diffusion-2-1)
