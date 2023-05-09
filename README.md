@@ -40,12 +40,18 @@ C:\Users\<user>\.cache\huggingface
 ### Python venv
 - [venv — Creation of virtual environments](https://docs.python.org/3/library/venv.html)
 
-### Models - stable diffusion
+### HuggingFace - Stable diffusion - Doc
+- [doc stable_diffusion/text2img](https://huggingface.co/docs/diffusers/api/pipelines/stable_diffusion/text2img)
+- [doc stable_diffusion/img2img](https://huggingface.co/docs/diffusers/api/pipelines/stable_diffusion/img2img)
+
+### HuggingFace - Stable diffusion - Models
+- [Search text-to-image models](https://huggingface.co/models?pipeline_tag=text-to-image)
+- [Search image-to-image models](https://huggingface.co/models?pipeline_tag=image-to-image)
 - [stable-diffusion-2-1](https://huggingface.co/stabilityai/stable-diffusion-2-1)
 - [stable-diffusion-x4-upscaler](https://huggingface.co/stabilityai/stable-diffusion-x4-upscaler)
 
-### Models - LLMs
-- [HuggingFace - search LLMs for stable diffusion prompting](https://huggingface.co/models?search=stable%20diffusion%20prompt)
+### HuggingFace - LLMs - Models
+- [Search LLMs for stable diffusion prompting](https://huggingface.co/models?search=stable%20diffusion%20prompt)
 
 ### Articles
 - [Effective and efficient diffusion](https://huggingface.co/docs/diffusers/stable_diffusion)
