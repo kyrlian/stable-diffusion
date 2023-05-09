@@ -23,33 +23,43 @@ def generate(prompt,seed=42):
     image.show() # open outside
     return image
 
-def getuserinput(stdscr, initialtext):
-    #TODO add box, and status info at the bottom
-    stdscr.addstr(0, 0, initialtext)
-    box = Textbox(stdscr, insert_mode=True)
-    def validate(ch):#handle key input
-        # exit with the escape key or resize
-        if ch in (27,  curses.KEY_RESIZE):
+def cursesmain(stdscr, userinput):
+    curses.use_default_colors()
+    screenwin = stdscr.derwin(0, 0)
+    screenwin.border()
+    screenwin.addstr(
+        0, 2, "Complete the prompt, type ESC to send, Ctrl-C to quit."
+    )
+    #screenwin.addstr(screenwin.getmaxyx()[0] - 1, 2, getinfo(llm))
+    inputwin = screenwin.derwin(
+        screenwin.getmaxyx()[0] - 2, screenwin.getmaxyx()[1] - 2, 1, 1
+    )
+    textbox = Textbox(inputwin, insert_mode=True)
+
+    def validator(ch):  # handle key input
+        if ch == 27:
             return curses.ascii.BEL  # Control-G to exit
-        # delete the character to the left of the cursor - not native with box.edit()
         elif ch in (curses.KEY_BACKSPACE, curses.ascii.DEL, curses.ascii.BS, 127):
             return curses.KEY_BACKSPACE
         return ch
-    stdscr.refresh()
-    box.edit(validate) # give input to user
-    return box.gather().strip()#return box content
 
-def main(screen, firstinput):
-    if firstinput != "":
-        user_input = getuserinput(screen, firstinput)
+    def getuserinput(prompt):
+        inputwin.addstr(0, 0, prompt)
+        inputwin.refresh()
+         # give input to user and return box content
+        return textbox.edit(validator).strip() 
+
+    screenwin.refresh()
+
+    #loop
     while True:
-        user_input = getuserinput(screen, firstinput).strip()
-        if user_input in ["quit", "exit", "bye"]:
-            break
-        generate( user_input)
+        if userinput != "":
+            generate(userinput)
+        userinput = getuserinput(userinput)
+
 
 if __name__ == "__main__":
     args = sys.argv[1:]
     firstinput=">"
     if len(args) > 0: firstinput = args[0]
-    curses.wrapper(main,firstinput) 
+    curses.wrapper(cursesmain,firstinput) 
