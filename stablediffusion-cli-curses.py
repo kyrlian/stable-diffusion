@@ -4,50 +4,65 @@ from diffusers import StableDiffusionPipeline, StableDiffusionImg2ImgPipeline, D
 import torch
 import curses
 from curses.textpad import Textbox
+#from PIL import Image
+
 
 def inittxt2imgpipeline(model_id):
     # Use the DPMSolverMultistepScheduler (DPM-Solver++) scheduler here instead
-    pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float16)
-    pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
+    pipe = StableDiffusionPipeline.from_pretrained(
+        model_id, torch_dtype=torch.float16)
+    pipe.scheduler = DPMSolverMultistepScheduler.from_config(
+        pipe.scheduler.config)
     pipe = pipe.to("cuda")
     return pipe
+
 
 def initimg2imgpipeline(model_id):
-    pipe = StableDiffusionImg2ImgPipeline.from_pretrained(model_id, torch_dtype=torch.float16)
+    pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
+        model_id, torch_dtype=torch.float16)
     pipe = pipe.to("cuda")
     return pipe
 
-txt2imgpipeline=inittxt2imgpipeline("stabilityai/stable-diffusion-2-1")
+
+txt2imgpipeline = inittxt2imgpipeline("stabilityai/stable-diffusion-2-1")
 img2imgpipeline = initimg2imgpipeline("runwayml/stable-diffusion-v1-5")
 
-def generate(prompt,nbimages=4,srcimg=None,seed=42):
+
+def generate(prompt, nbimages=4, srcimg=None, seed=42):
     generator = torch.Generator("cuda").manual_seed(seed)
-    #TODO add negative_prompt
+    # TODO add negative_prompt
     if srcimg is not None:
-        images = img2imgpipeline(prompt, image=srcimg, strength=0.75, guidance_scale=7.5, num_images_per_prompt=nbimages, generator=generator).images
+        print("img2imgpipeline")
+        #strength is 0-1 (1=ignore source image)
+        images = img2imgpipeline(prompt, image=srcimg, strength=0.75, guidance_scale=7.5,
+                                 num_images_per_prompt=nbimages, generator=generator).images
     else:
-        images = txt2imgpipeline(prompt, num_images_per_prompt=nbimages, generator=generator).images
+        print("txt2imgpipeline")
+        images = txt2imgpipeline(
+            prompt, num_images_per_prompt=nbimages, generator=generator).images
     for idx, image in enumerate(images):
-        fname = f"images/{prompt.replace(' ','-')}-{seed}-{idx}of{nbimages}.png"
+        # PIL.Image.Image
+        fname = f"images/{prompt.replace(' ','-')}-{seed}-{idx+1}of{nbimages}.png"
         image.save(fname)
-        #display(image) # open inline - for notebooks
+        # display(image) # open inline - for notebooks
         image.show() # open outside
+        #Image.open(fname).show()
     return images
 
-def cursesmain(stdscr, userinput):
+
+def cursesmain(stdscr: curses.window, userinput):
     curses.use_default_colors()
     screenwin = stdscr.derwin(0, 0)
-    screenwin.border()
-    inputwin = screenwin.derwin(screenwin.getmaxyx()[0] - 2, screenwin.getmaxyx()[1] - 2, 1, 1)
+    inputwin = screenwin.derwin(
+        screenwin.getmaxyx()[0] - 2, screenwin.getmaxyx()[1] - 2, 1, 1)
     textbox = Textbox(inputwin, insert_mode=True)
-    screenwin.refresh()
 
-    def settitle(txt):
-        screenwin.addstr(0, 2, txt)
-        screenwin.refresh()
-
-    def setstatus(txt):
-        screenwin.addstr(screenwin.getmaxyx()[0] - 1, 2, txt)
+    def redraw(title, status=None):
+        screenwin.clear()
+        screenwin.border()
+        screenwin.addstr(0, 2, title)  # title
+        if status is not None:
+            screenwin.addstr(screenwin.getmaxyx()[0] - 1, 2, status)
         screenwin.refresh()
 
     def validator(ch):  # handle key input
@@ -57,35 +72,54 @@ def cursesmain(stdscr, userinput):
             return curses.KEY_BACKSPACE
         return ch
 
-    def getuserinput(instruction, prompt):
-        settitle(instruction)
+    def getuserinput(title, prompt, status):
+        redraw(title, status)
         inputwin.addstr(0, 0, prompt)
-        inputwin.refresh()
-         # give input to user and return box content
-        return textbox.edit(validator).strip() 
+        # give input to user and return box content
+        userinput = textbox.edit(validator).strip()
+        redraw(title, f"Userinput: [{userinput}]")
+        return userinput
 
-    #loop
+    # loop
     inimage = None
-    nbbatch=4
-    while True:
+    nbbatch = 4
+    status = "..."
+    doloop = True
+    while doloop:
         if userinput != "":
-            images = generate(userinput,nbbatch,inimage)
-            #ask the user to choose one output to refine
+            generateorderivate = "Generating"
+            if inimage is not None:
+                generateorderivate = "Derivating"
+            redraw("Working...", f"{generateorderivate}: [{userinput}]")
+            images = generate(userinput, nbbatch, inimage)
+            # ask the user to choose one output to refine
             inimage = None
-            choice = getuserinput(f"Choose image to keep (1-{nbbatch})","")
-            if choice in list(range(1,nbbatch+1)):
-                inimage = images[choice-1]
-                setstatus(f"Deriving from image {choice}")
-            elif choice.lower() in ["reset"]:
-                userinput=""
-                setstatus("Reset")
-            elif choice.lower() in ["quit", "exit", "bye"]:
-                break
-        userinput = getuserinput("Complete the prompt, type ESC to send, Ctrl-C to quit.",userinput)
+            gotchoice = False
+            while not gotchoice:
+                choice = getuserinput(
+                    f"Choose image to keep (1-{nbbatch})", "1", status)
+                if choice.isdigit() and int(choice) in list(range(1, nbbatch+1)):
+                    inimage = images[int(choice)-1]
+                    status = f"Deriving from image [{choice}]"
+                    gotchoice = True
+                elif choice.lower() in ["reset"]:
+                    userinput = ""
+                    status = "Reset"
+                    gotchoice = True
+                elif choice.lower() in ["quit", "exit", "bye"]:
+                    doloop = False
+                    gotchoice = True
+                    status = "Quit"
+                else:
+                    status = f"Incorrect choice [{choice}]"
+        if doloop:
+            userinput = getuserinput(
+            "Complete the prompt, type ESC to send, Ctrl-C to quit.", userinput, status)
 
 
 if __name__ == "__main__":
     args = sys.argv[1:]
-    firstinput=""
-    if len(args) > 0: firstinput = args[0]
-    curses.wrapper(cursesmain,firstinput) 
+    firstinput = ""
+    if len(args) > 0:
+        firstinput = args[0]
+    curses.wrapper(cursesmain, firstinput)
