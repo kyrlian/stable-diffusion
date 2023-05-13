@@ -14,13 +14,13 @@ deactivate
 ```
 
 ## Install
-```
-pip install -r requirements
-```
-
 [pytorch install on windows with cuda](https://pytorch.org/get-started/locally/#windows-package-manager)
 ```
-pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu117
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu117
+```
+
+```
+pip install -r requirements
 ```
 
 ## Run
@@ -49,6 +49,7 @@ C:\Users\<user>\.cache\huggingface
 - [Search image-to-image models](https://huggingface.co/models?pipeline_tag=image-to-image)
 - [stable-diffusion-2-1](https://huggingface.co/stabilityai/stable-diffusion-2-1)
 - [stable-diffusion-x4-upscaler](https://huggingface.co/stabilityai/stable-diffusion-x4-upscaler)
+- [dreamlike-diffusion](https://huggingface.co/dreamlike-art/dreamlike-diffusion-1.0)
 
 ### HuggingFace - LLMs - Models
 - [Search LLMs for stable diffusion prompting](https://huggingface.co/models?search=stable%20diffusion%20prompt)

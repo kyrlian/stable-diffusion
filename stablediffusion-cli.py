@@ -1,3 +1,5 @@
+#!pyhon3
+
 import sys
 from diffusers import StableDiffusionPipeline, DPMSolverMultistepScheduler
 import torch
@@ -27,7 +29,7 @@ def main(firstinput):
         user_input = input(">").strip()
         if user_input in ["quit", "exit", "bye"]:
             break
-        res = generate( user_input)
+        res = generate(user_input)
 
 if __name__ == "__main__":
     args = sys.argv[1:]
