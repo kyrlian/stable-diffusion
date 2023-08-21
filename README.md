@@ -16,7 +16,7 @@ deactivate
 ## Install
 [pytorch install on windows with cuda](https://pytorch.org/get-started/locally/#windows-package-manager)
 ```
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu117
+pip install -r requirements-torch-windows.txt --upgrade
 ```
 
 ```
@@ -27,6 +27,8 @@ pip install -r requirements
 ```
 python.exe .\stablediffusion-cli.py
 ```
+
+See notebooks for more complex examples.
 
 ## Uninstall
 
