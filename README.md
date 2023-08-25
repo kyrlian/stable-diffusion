@@ -23,12 +23,18 @@ pip install -r requirements-torch-windows.txt --upgrade
 pip install -r requirements
 ```
 
-## Run
+## Run the basic cli
 ```
 python.exe .\stablediffusion-cli.py
 ```
 
+## Notebooks
+
 See notebooks for more complex examples.
+
+- [stablediffusion with prompt variations](./stablediffusion-with-prompt-variations.ipynb)
+- [stablediffusion xl](./stablediffusion-xl.ipynb)
+- [fooocus-api](./fooocus-api.ipynb) (get and run [foocus](https://github.com/lllyasviel/Fooocus) first)
 
 ## Uninstall
 
@@ -56,6 +62,9 @@ C:\Users\<user>\.cache\huggingface
 ### HuggingFace - LLMs - Models
 - [Search LLMs for stable diffusion prompting](https://huggingface.co/models?search=stable%20diffusion%20prompt)
 
+### Tools
+- [foocus](https://github.com/lllyasviel/Fooocus)
+  
 ### Articles
 - [Effective and efficient diffusion](https://huggingface.co/docs/diffusers/stable_diffusion)
 - [Prompt Templates for Stable Diffusion](https://github.com/Dalabad/stable-diffusion-prompt-templates)
