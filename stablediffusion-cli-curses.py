@@ -1,61 +1,29 @@
 
 import sys
-from diffusers import StableDiffusionPipeline, StableDiffusionImg2ImgPipeline, DPMSolverMultistepScheduler
-import torch
 import curses
 from curses.textpad import Textbox
-#from PIL import Image
-
-
-def inittxt2imgpipeline(model_id):
-    # Use the DPMSolverMultistepScheduler (DPM-Solver++) scheduler here instead
-    pipe = StableDiffusionPipeline.from_pretrained(
-        model_id, torch_dtype=torch.float16)
-    pipe.scheduler = DPMSolverMultistepScheduler.from_config(
-        pipe.scheduler.config)
-    pipe = pipe.to("cuda")
-    return pipe
-
-
-def initimg2imgpipeline(model_id):
-    pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
-        model_id, torch_dtype=torch.float16)
-    pipe = pipe.to("cuda")
-    return pipe
-
-
-txt2imgpipeline = inittxt2imgpipeline("stabilityai/stable-diffusion-2-1")
-img2imgpipeline = initimg2imgpipeline("runwayml/stable-diffusion-v1-5")
-
-
-def generate(prompt, nbimages=4, srcimg=None, seed=42):
-    generator = torch.Generator("cuda").manual_seed(seed)
-    # TODO add negative_prompt
-    if srcimg is not None:
-        print("img2imgpipeline")
-        #strength is 0-1 (1=ignore source image)
-        images = img2imgpipeline(prompt, image=srcimg, strength=0.75, guidance_scale=7.5,
-                                 num_images_per_prompt=nbimages, generator=generator).images
-    else:
-        print("txt2imgpipeline")
-        images = txt2imgpipeline(
-            prompt, num_images_per_prompt=nbimages, generator=generator).images
-    for idx, image in enumerate(images):
-        # PIL.Image.Image
-        fname = f"images/{prompt.replace(' ','-')}-{seed}-{idx+1}of{nbimages}.png"
-        image.save(fname)
-        # display(image) # open inline - for notebooks
-        image.show() # open outside
-        #Image.open(fname).show()
-    return images
-
+from utils_stablediffusion import simplePipeline, img2imgPipeline
 
 def cursesmain(stdscr: curses.window, userinput):
     curses.use_default_colors()
     screenwin = stdscr.derwin(0, 0)
-    inputwin = screenwin.derwin(
-        screenwin.getmaxyx()[0] - 2, screenwin.getmaxyx()[1] - 2, 1, 1)
+    inputwin = screenwin.derwin(screenwin.getmaxyx()[0] - 2, screenwin.getmaxyx()[1] - 2, 1, 1)
     textbox = Textbox(inputwin, insert_mode=True)
+    txt2img = simplePipeline()
+    img2img = img2imgPipeline()
+
+    def generate(prompt, nbimages=4, srcimg=None, seed=42):
+        if srcimg is not None:
+            print("img2imgpipeline")
+            images = img2img.generate(prompt, srcimg, nbimages).images
+        else:
+            print("txt2imgpipeline")
+            images = txt2img.generate(prompt, nbimages).images
+        for idx, image in enumerate(images):
+            fname = f"images/{prompt.replace(' ','-')}-{seed}-{idx+1}of{nbimages}.png"
+            image.save(fname)
+            image.show() # open outside
+        return images
 
     def redraw(title, status=None):
         screenwin.clear()
@@ -80,7 +48,7 @@ def cursesmain(stdscr: curses.window, userinput):
         redraw(title, f"Userinput: [{userinput}]")
         return userinput
 
-    # loop
+    # main loop
     inimage = None
     nbbatch = 4
     status = "..."
@@ -119,7 +87,4 @@ def cursesmain(stdscr: curses.window, userinput):
 
 if __name__ == "__main__":
     args = sys.argv[1:]
-    firstinput = ""
-    if len(args) > 0:
-        firstinput = args[0]
-    curses.wrapper(cursesmain, firstinput)
+    curses.wrapper(cursesmain, args[0] if len(args) > 0 else "")
