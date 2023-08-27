@@ -9,8 +9,8 @@ class simplePipeline:
         _ = pipe.to("cuda")
         self.pipe = pipe
 
-    def generate(self, prompt, seed=42, **generatekwargs):
-        if not 'generator' in generatekwargs: generatekwargs["generator"] = torch.Generator("cuda").manual_seed(seed)
+    def generate(self, prompt, seed=None, **generatekwargs):
+        if (seed is not None): generatekwargs["generator"] = torch.Generator("cuda").manual_seed(seed)
         images = self.pipe(prompt, **generatekwargs).images
         return (images[0] if len(images)==1 else images)
     
@@ -21,8 +21,8 @@ class img2imgPipeline:
         _ = pipe.to("cuda")
         self.pipe = pipe
 
-    def generate(self, prompt, srcimg, nbimages=1, seed=42):
-        generator = torch.Generator("cuda").manual_seed(seed)
+    def generate(self, prompt, srcimg, nbimages=1, seed=None):
+        if (seed is not None): generator = torch.Generator("cuda").manual_seed(seed)
         images = self.pipe(prompt, image=srcimg, strength=0.75, guidance_scale=7.5,
                                  num_images_per_prompt=nbimages, generator=generator).images
         return (images[0] if len(images)==1 else images)
@@ -36,9 +36,9 @@ class sdxlPipeline:
         # pipe.unet = torch.compile(pipe.unet, mode="reduce-overhead", fullgraph=True) # Not supported on windows yet
         self.pipe = pipe
 
-    def generate(self, prompt1, seed=42, **generatekwargs):
+    def generate(self, prompt1, seed=None, **generatekwargs):
         # generator = torch.Generator("cuda").manual_seed(seed)
-        if not 'generator' in generatekwargs: generatekwargs["generator"] = torch.Generator("cuda").manual_seed(seed)
+        if (seed is not None): generatekwargs["generator"] = torch.Generator("cuda").manual_seed(seed)
         images = self.pipe(prompt1, **generatekwargs).images
         return (images[0] if len(images)==1 else images)
 
@@ -60,11 +60,11 @@ class sdRefinerPipeline:
         _ = refiner.to("cuda")
         self.refiner = refiner
 
-    def generate(self, prompt, seed=42):
+    def generate(self, prompt, seed=None):
         # Define how many steps and what % of steps to be run on each experts (80/20) here
         n_steps = 40
         high_noise_frac = 0.8
-        generator = torch.Generator("cuda").manual_seed(seed)
+        if (seed is not None): generator = torch.Generator("cuda").manual_seed(seed)
         # run both experts
         base_image = self.base(
             prompt=prompt,
