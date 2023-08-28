@@ -21,6 +21,21 @@ class fooocusClient:
              "papercraft-collage", "papercraft-flat papercut", "papercraft-kirigami", "papercraft-paper mache", "papercraft-paper quilling", "papercraft-papercut collage", "papercraft-papercut shadow box", 
              "papercraft-stacked papercut", "papercraft-thick layered papercut", 
              "photo-alien", "photo-film noir", "photo-hdr", "photo-long exposure", "photo-neon noir", "photo-silhouette", "photo-tilt-shift"]
+    styles_sai = ["sai-3d-model", "sai-analog film", "sai-anime", "sai-cinematic", "sai-comic book", "sai-craft clay", "sai-digital art", "sai-enhance", "sai-fantasy art", 
+             "sai-isometric", "sai-line art", "sai-lowpoly", "sai-neonpunk", "sai-origami", "sai-photographic", "sai-pixel art", "sai-texture"]
+    styles_ads = ["ads-advertising", "ads-automotive", "ads-corporate", "ads-fashion editorial", "ads-food photography", "ads-luxury", "ads-real estate", "ads-retail"]
+    styles_art = ["artstyle-abstract", "artstyle-abstract expressionism", "artstyle-art deco", "artstyle-art nouveau", "artstyle-constructivist", "artstyle-cubist", "artstyle-expressionist", "artstyle-graffiti", 
+             "artstyle-hyperrealism", "artstyle-impressionist", "artstyle-pointillism", "artstyle-pop art", "artstyle-psychedelic", "artstyle-renaissance", "artstyle-steampunk", "artstyle-surrealist", 
+             "artstyle-typography", "artstyle-watercolor"]
+    styles_futuristic = ["futuristic-biomechanical", "futuristic-biomechanical cyberpunk", "futuristic-cybernetic", "futuristic-cybernetic robot", "futuristic-cyberpunk cityscape", "futuristic-futuristic", 
+             "futuristic-retro cyberpunk", "futuristic-retro futurism", "futuristic-sci-fi", "futuristic-vaporwave"]
+    styles_games = ["game-bubble bobble", "game-cyberpunk game", "game-fighting game", "game-gta", "game-mario", "game-minecraft", "game-pokemon", "game-retro arcade", "game-retro game", "game-rpg fantasy game", 
+             "game-strategy game", "game-streetfighter", "game-zelda" ]
+    styles_misc = ["misc-architectural", "misc-disco", "misc-dreamscape", "misc-dystopian", "misc-fairy tale", "misc-gothic", "misc-grunge", "misc-horror", "misc-kawaii", "misc-lovecraftian", "misc-macabre", 
+             "misc-manga", "misc-metropolis", "misc-minimalist", "misc-monochrome", "misc-nautical", "misc-space", "misc-stained glass", "misc-techwear fashion", "misc-tribal", "misc-zentangle" ]
+    styles_paper = ["papercraft-collage", "papercraft-flat papercut", "papercraft-kirigami", "papercraft-paper mache", "papercraft-paper quilling", "papercraft-papercut collage", "papercraft-papercut shadow box", 
+             "papercraft-stacked papercut", "papercraft-thick layered papercut" ]
+    styles_photo = ["photo-alien", "photo-film noir", "photo-hdr", "photo-long exposure", "photo-neon noir", "photo-silhouette", "photo-tilt-shift"]
     performances = ["Speed", "Quality"]
 
     def __init__(self):
