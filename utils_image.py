@@ -1,4 +1,6 @@
-import re
+import os, re, glob
+from PIL import Image
+
 
 def saveimage(image, prompt, seed="", postfix=""):
     cleanprompt = re.sub("( |,)", '-', prompt)[:20]
@@ -18,3 +20,10 @@ def generate_all(prompts, generate, **generate_kwargs):
         except Exception:
             pass
         # display(image)
+
+def display_latest(directory):
+    list_of_files = glob.glob(directory + "/*.png")
+    latest_file = max(list_of_files, key=os.path.getctime)
+    image = Image.open(latest_file)
+    image.show()
+    # display(image)

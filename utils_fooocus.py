@@ -1,4 +1,6 @@
 import time
+import random
+from fractions import Fraction
 from gradio_client import Client
 
 class fooocusClient:
@@ -25,9 +27,9 @@ class fooocusClient:
         self.client = Client("http://127.0.0.1:7860/") 
         self.size = self.correct_size("1024×1024")
         self.style = "cinematic-default"
-        self.performance = "Speed" # Speed or Quality
+        self.performance = "Speed" # Speed or Quality (speed is 30 iterations, 60 for quality)
         self.nbimages = 1
-        self.seed = None # 0 for random
+        self.seed = None
         self.sharpness = 0        
     
     def info(self):
@@ -36,11 +38,19 @@ class fooocusClient:
         return info
     
     def list_sizes():
-        print(fooocusClient.sizes)
-
+        for s in fooocusClient.sizes:
+            print(f"{s} : {fooocusClient.get_ratio(s)}", end= ', ')
+        return fooocusClient.sizes
+    
+    def get_ratio(size):
+        ratio = size.replace("×","/")
+        frac = Fraction(ratio).limit_denominator(100)
+        return str(frac)
+    
     def lists_styles():
         print(fooocusClient.styles)
-
+        return fooocusClient.styles
+    
     def correct_size(self, size):
         return size.replace("x", "×")
     
@@ -77,16 +87,19 @@ class fooocusClient:
         if self.check_performance(performance):  self.performance = performance
 
 
-    def generate(self, prompt, negative_prompt="", style=None, size=None, performance=None, nbimages=1, seed=42, sharpness=0, debug=False):
+    def generate(self, prompt, negative_prompt="", style=None, size=None, performance=None, nbimages=None, seed=None, sharpness=None, debug=False):
+        if isinstance(prompt, list):
+            for p in prompt:
+                self.generate(p, negative_prompt, style, size, performance, nbimages, seed, sharpness, debug)
+            return
+
         style = style if style is not None and self.check_style(style) else self.style
         size = self.correct_size(size if size is not None and self.check_size(size) else self.size)
         performance = performance if performance is not None and self.check_performance(performance) else self.performance
-        nbimages = nbimages if nbimages is not None else self.nbimages
-        sharpness = sharpness if sharpness is not None else self.sharpness
+        nbimages = nbimages or self.nbimages
+        sharpness = sharpness or self.sharpness
+        seed = seed or self.seed or random.randrange(1000)
 
-        # TODO how to random ? TODO if None set to a random value
-        seed = seed if seed is not None else self.seed
-                
         job = self.client.submit( #submit is non blocking
             prompt,				# Prompt - str
             negative_prompt,	# Negative promt - str
