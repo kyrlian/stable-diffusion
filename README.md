@@ -3,29 +3,34 @@
 ## Optional - venv
 
 Create and activate python virtual env
-```
+```sh
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
 
 to deactivate the virutal env:
-```
+```sh
 deactivate
 ```
 
 ## Install
 [pytorch install on windows with cuda](https://pytorch.org/get-started/locally/#windows-package-manager)
-```
+```sh
 pip install -r requirements-torch-windows.txt --upgrade
 ```
 
-```
+```sh
 pip install -r requirements
 ```
 
 ## Run the basic cli
-```
+```sh
 python.exe .\stablediffusion-cli.py
+```
+
+## Use in REPL
+```sh
+ipython.exe .\init_repl.py
 ```
 
 ## Notebooks
@@ -39,7 +44,7 @@ See notebooks for more complex examples.
 ## Uninstall
 
 On windows, huggingface models are stored in:
-```
+```sh
 C:\Users\<user>\.cache\huggingface
 ```
 

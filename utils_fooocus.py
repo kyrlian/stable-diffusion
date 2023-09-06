@@ -150,3 +150,8 @@ class fooocusClient:
         for p in prompts:
             print(f"Generating: {p}")
             self.generate(p, **generate_kwargs)
+
+if __name__ == "__main__":
+    cl = fooocusClient()
+    print(cl.info())
+    print(f"Loaded Fooocus client as 'cl'")
