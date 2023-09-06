@@ -23,23 +23,28 @@ pip install -r requirements-torch-windows.txt --upgrade
 pip install -r requirements
 ```
 
-## Run the basic cli
+## Run the basic stable diffusion cli
 ```sh
-python.exe .\stablediffusion-cli.py
+python.exe .\cli_sd.py
 ```
 
 ## Use in REPL
+Stable Diffusion
 ```sh
-ipython.exe .\init_repl.py
+ipython.exe .\repl_sd.py
+```
+Fooocus
+```sh
+ipython.exe .\repl_fooocus.py
 ```
 
 ## Notebooks
 
-See notebooks for more complex examples.
+See [notebooks](./notebooks/) for more complex examples.
 
-- [stablediffusion with prompt variations](./stablediffusion-with-prompt-variations.ipynb)
-- [stablediffusion xl](./stablediffusion-xl.ipynb)
-- [fooocus-api](./fooocus-api.ipynb) (get and run [foocus](https://github.com/lllyasviel/Fooocus) first)
+- [stablediffusion with prompt variations](./notebooks/stablediffusion-with-prompt-variations.ipynb)
+- [stablediffusion xl](./notebooks/stablediffusion-xl.ipynb)
+- [fooocus-api](./notebooks/fooocus-api.ipynb) (get and run [foocus](https://github.com/lllyasviel/Fooocus) first)
 
 ## Uninstall
 
