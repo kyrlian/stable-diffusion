@@ -29,7 +29,7 @@ class fooocusClient:
 
     def __init__(self):
         self.client = Client("http://127.0.0.1:7860/") 
-        self.size = self.correct_size("1024×1024")
+        self.size = self.correct_size("1472x704") # 1024×1024
         self.styles = [fooocusClient.styles[0]]
         self.performance = "Speed" # Speed or Quality (speed is 30 iterations, 60 for quality)
         self.nbimages = 1
