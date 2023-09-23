@@ -5,3 +5,4 @@ scipy
 safetensors
 invisible_watermark
 gradio_client
+ipywidgets
