@@ -6,6 +6,7 @@ from gradio_client import Client
 class fooocusClient:
     sizes = ["704×1408", "704×1344", "768×1344", "768×1280", "832×1216", "832×1152", "896×1152", "896×1088", "960×1088", "960×1024", "1024×1024", "1024×960", "1088×960", "1088×896", 
              "1152×896", "1152×832", "1216×832", "1280×768", "1344×768", "1344×704", "1408×704", "1472×704", "1536×640", "1600×640", "1664×576", "1728×576"]
+    # Fooocus V2 is not really a style, but triggers prompt extension
     styles = ["Fooocus V2", "Default (Slightly Cinematic)", 
             "SAI 3D Model", "SAI Analog Film", "SAI Anime", "SAI Cinematic", "SAI Comic Book", "SAI Craft Clay", "SAI Digital Art", "SAI Enhance", "SAI Fantasy Art", "SAI Isometric", "SAI Line Art", "SAI Lowpoly", "SAI Neonpunk", "SAI Origami", "SAI Photographic",
             "SAI Pixel Art", "SAI Texture", "Ads Advertising", "Ads Automotive", "Ads Corporate", "Ads Fashion Editorial", "Ads Food Photography", "Ads Luxury", "Ads Real Estate", "Ads Retail", 
