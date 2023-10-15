@@ -9,3 +9,5 @@ fc = fooocusClient()
 fc.set_size("1472x704")
 print(fc.info())
 print(f"Loaded Fooocus client as 'fc'")
+gen = fc.generate
+print(f"use 'gen' alias for fc.generate")

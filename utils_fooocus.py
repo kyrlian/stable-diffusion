@@ -37,7 +37,7 @@ class fooocusClient:
         self.sharpness = 0        
     
     def info(self):
-        info=f"size: {self.size}, style: {self.style}, performance: {self.performance}, nbimages: {self.nbimages}, seed: {self.seed}, sharpness: {self.sharpness}"
+        info=f"size: {self.size}, style: {self.styles}, performance: {self.performance}, nbimages: {self.nbimages}, seed: {self.seed}, sharpness: {self.sharpness}"
         # print(info)
         return info
     
@@ -91,10 +91,10 @@ class fooocusClient:
         if self.check_performance(performance):  self.performance = performance
 
 
-    def generate(self, prompt, negative_prompt="", styles=None, size=None, performance=None, nbimages=None, seed=None, sharpness=None, debug=False):
+    def generate(self, prompt, negative_prompt="", styles=None, size=None, performance=None, nbimages=None, seed=None, sharpness=None, wait=True, debug=False):
         if isinstance(prompt, list):
             for p in prompt:
-                self.generate(p, negative_prompt, styles, size, performance, nbimages, seed, sharpness, debug)
+                self.generate(p, negative_prompt, styles, size, performance, nbimages, seed, sharpness,wait, debug)
             return
 
         styles = styles if styles is not None and self.check_styles(styles) else self.styles
@@ -105,38 +105,58 @@ class fooocusClient:
         seed = seed or self.seed or random.randrange(1000)
 
         job = self.client.submit( #submit is non blocking
-            prompt,				# Prompt - str
-            negative_prompt,	# Negative promt - str
-            styles,			# Styles - [str]
-            performance,		# Speed or Quality - str
-            size,		        # Size - str - (width × height)
-            nbimages,			# Nb Images to generate - int
-            seed,			    # Seed - int 6 - 
-            sharpness,			# Sharpness - int | float
-            "sd_xl_base_1.0_0.9vae.safetensors",	# Base Model - 		['sd_xl_base_1.0_0.9vae.safetensors', 'sd_xl_refiner_1.0_0.9vae.safetensors']
-            "sd_xl_refiner_1.0_0.9vae.safetensors",	# Refiner - ['None', 'sd_xl_base_1.0_0.9vae.safetensors', 'sd_xl_refiner_1.0_0.9vae.safetensors']
-            "None",	# LoRA 1 - ['None', 'sd_xl_offset_example-lora_1.0.safetensors']
-            -2,		# LoRA 1 Weight - int | float (between -2 and 2)
-            "None",	# LoRA 2 - ['None', 'sd_xl_offset_example-lora_1.0.safetensors']
-            -2,		# LoRA 2 Weight - int | float (between -2 and 2)
-            "None",	# LoRA 3 - ['None', 'sd_xl_offset_example-lora_1.0.safetensors']
-            -2,		# LoRA 3 Weight - int | float (between -2 and 2)
-            "None",	# LoRA 4 - ['None', 'sd_xl_offset_example-lora_1.0.safetensors']
-            -2,		# LoRA 4 Weight - int | float (between -2 and 2)
-            "None",	# LoRA 5 - ['None', 'sd_xl_offset_example-lora_1.0.safetensors']
-            -2,		# LoRA 5 Weight - int | float (between -2 and 2)
-            False,	# bool - use 'Input Image'
-            "Howdy!",	# str ??
-            "Disabled",	# Upscale or Variation - str - Disabled, Vary (Subtle), Vary (Strong), Upscale (1.5x), Upscale (2x), Upscale (Fast 2x) 
-            "",	# Upscale image - str - filepath or URL to image
-            ["Left"],	# Inpaint or Outpaint directions - List[str] - Left, Right, Top, Bottom
-            "",	# Inpaint or outpaint - str - filepath or URL to image
-            fn_index=13
-            )
+		prompt,				# Prompt - str
+		negative_prompt,	# Negative promt - str
+		styles,				# Styles - [str]
+		performance,		# Speed or Quality - str
+		size.replace("x", "×"),		# Size - str - (width × height)
+		nbimages,			# Nb Images to generate - int
+		seed,			# Seed - int
+		sharpness,			# Sharpness - int | float
+		1,	# Guidance Scale - int | float (numeric value between 1.0 and 30.0)
+		"sd_xl_base_1.0_0.9vae.safetensors",	# Base Model - 		['sd_xl_base_1.0_0.9vae.safetensors', 'sd_xl_refiner_1.0_0.9vae.safetensors']
+		"sd_xl_refiner_1.0_0.9vae.safetensors",	# Refiner - ['None', 'sd_xl_base_1.0_0.9vae.safetensors', 'sd_xl_refiner_1.0_0.9vae.safetensors']
+		"None",	# LoRA 1 - ['None', 'sd_xl_offset_example-lora_1.0.safetensors']
+		-2,		# LoRA 1 Weight - int | float (between -2 and 2)
+		"None",	# LoRA 2 - ['None', 'sd_xl_offset_example-lora_1.0.safetensors']
+		-2,		# LoRA 2 Weight - int | float (between -2 and 2)
+		"None",	# LoRA 3 - ['None', 'sd_xl_offset_example-lora_1.0.safetensors']
+		-2,		# LoRA 3 Weight - int | float (between -2 and 2)
+		"None",	# LoRA 4 - ['None', 'sd_xl_offset_example-lora_1.0.safetensors']
+		-2,		# LoRA 4 Weight - int | float (between -2 and 2)
+		"None",	# LoRA 5 - ['None', 'sd_xl_offset_example-lora_1.0.safetensors']
+		-2,		# LoRA 5 Weight - int | float (between -2 and 2)
+		# upscale or variation
+		False,	# bool in 'Input Image' Checkbox component
+		"Howdy!",	# str in 'parameter_30' Textbox component ??
+		"Disabled",	# str in 'Upscale or Variation:' Radio component - Disabled, Vary (Subtle), Vary (Strong), Upscale (1.5x), Upscale (2x), Upscale (Fast 2x) 
+		"",	# str (filepath or URL to image) in 'Drag above image to here' Image component
+		# outpainting
+		["Left"],	# List[str] in 'Outpaint' Checkboxgroup component - Left, Right, Top, Bottom
+		"",	# str (filepath or URL to image) in 'Drag above image to here' Image component
+		# image prompts
+		"",	# str (filepath or URL to image) in 'Image' Image component
+		0,	# int | float (numeric value between 0.0 and 1.0) in 'Stop At' Slider component
+		0,	# int | float (numeric value between 0.0 and 2.0) in 'Weight' Slider component
+		"Image Prompt",	# str in 'Type' Radio component
+		"",	# str (filepath or URL to image) in 'Image' Image component
+		0,	# int | float (numeric value between 0.0 and 1.0) in 'Stop At' Slider component
+		0,	# int | float (numeric value between 0.0 and 2.0) in 'Weight' Slider component
+		"Image Prompt",	# str in 'Type' Radio component
+		"",	# str (filepath or URL to image) in 'Image' Image component
+		0,	# int | float (numeric value between 0.0 and 1.0) in 'Stop At' Slider component
+		0,	# int | float (numeric value between 0.0 and 2.0) in 'Weight' Slider component
+		"Image Prompt",	# str in 'Type' Radio component
+		"",	# str (filepath or URL to image) in 'Image' Image component
+		0,	# int | float (numeric value between 0.0 and 1.0) in 'Stop At' Slider component
+		0,	# int | float (numeric value between 0.0 and 2.0) in 'Weight' Slider component
+		"Image Prompt",	# str in 'Type' Radio component
+		fn_index=23)
         if debug: print(job.status())
-        while not job.done():
-            time.sleep(1)#seconds
-            if debug: print(job.status())
+        if wait:
+            while not job.done():
+                time.sleep(1)#seconds
+                if debug: print(job.status())
         res = job.status()
         return res
 
@@ -145,7 +165,7 @@ class fooocusClient:
         print(self.info())
         for p in prompts:
             print(f"Generating: {p}")
-            self.generate(p, **generate_kwargs)
+            self.generate(p, wait=False, **generate_kwargs)
 
 if __name__ == "__main__":
     cl = fooocusClient()
