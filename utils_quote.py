@@ -10,3 +10,7 @@ def getquote():
     quote=json[0]['q']
     # print(f"q: {quote}")
     return quote
+
+
+if __name__ == "__main__":
+    print(getquote())

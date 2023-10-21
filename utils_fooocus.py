@@ -97,6 +97,9 @@ class fooocusClient:
                 self.generate(p, negative_prompt, styles, size, performance, nbimages, seed, sharpness,wait, debug)
             return
 
+        if isinstance(styles, str):
+            styles = [styles]
+        
         styles = styles if styles is not None and self.check_styles(styles) else self.styles
         size = self.correct_size(size if size is not None and self.check_size(size) else self.size)
         performance = performance if performance is not None and self.check_performance(performance) else self.performance
@@ -158,14 +161,17 @@ class fooocusClient:
                 time.sleep(1)#seconds
                 if debug: print(job.status())
         res = job.status()
-        return res
+        return job
 
     #call with : generate_all(["Sunset","Sunrise"], **{'size':'1472x704'})
     def generate_all(self, prompts, **generate_kwargs):
         print(self.info())
+        jobs=[]
         for p in prompts:
             print(f"Generating: {p}")
-            self.generate(p, wait=False, **generate_kwargs)
+            j=self.generate(p, wait=False, **generate_kwargs)
+            jobs.apped(j)
+        return jobs    
 
 if __name__ == "__main__":
     cl = fooocusClient()
