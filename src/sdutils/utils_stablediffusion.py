@@ -52,7 +52,8 @@ class sdxlturboPipeline:
 
     def generate(self, prompt1, seed=None, **generatekwargs):
         if (seed is not None): generatekwargs["generator"] = torch.Generator("cuda").manual_seed(seed)
-        images = self.pipe(prompt=prompt1, num_inference_steps=1, guidance_scale=0.0, **generatekwargs).images
+        # num_inference_steps=1, guidance_scale=0.0
+        images = self.pipe(prompt=prompt1, guidance_scale=0.0, **generatekwargs).images
         return (images[0] if len(images)==1 else images)
     
 class sdRefinerPipeline:
