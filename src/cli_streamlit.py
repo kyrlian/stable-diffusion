@@ -7,7 +7,8 @@ from sdutils.utils_prompt import expand
 
 # streamlit config
 streamlit.set_page_config(layout="wide")
-streamlit.title("Stable diffusion")
+engine="stabilityai/sdxl-turbo"
+streamlit.title(engine)
 
 
 def fix(n):
@@ -30,7 +31,7 @@ with streamlit.sidebar:
 def load_pipeline():
     # https://huggingface.co/stabilityai/sdxl-turbo
     xlturbopipeline = AutoPipelineForText2Image.from_pretrained(
-        "stabilityai/sdxl-turbo", torch_dtype=torch.float16, variant="fp16"
+        engine, torch_dtype=torch.float16, variant="fp16"
     )
     xlturbopipeline.to("cuda")
     return xlturbopipeline
@@ -41,6 +42,7 @@ pipe = load_pipeline()
 prompt = streamlit.text_input("Prompt", "A /cat|dog/ in a box")
 for p in expand(prompt):
     for i in range(nbimg):
+        streamlit.text(f"Generating image {i+1}/{nbimg} for prompt {p}, seed: {seed+i}")
         generator = torch.Generator("cuda").manual_seed(seed + i)
         img = pipe(
             prompt=p,
