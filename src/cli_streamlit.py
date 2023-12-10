@@ -10,19 +10,15 @@ streamlit.set_page_config(layout="wide")
 engine="stabilityai/sdxl-turbo"
 streamlit.title(engine)
 
-
-def fix(n):
-    return int(n / 64) * 64
-
-
 # streamlit side pane
 with streamlit.sidebar:
     streamlit.write("Image size")
-    imgw = fix(streamlit.slider("Width", 1, 2048, 1472))
-    maxh = fix(1024000 / imgw)  # limit height based on selected width
-    imgh = fix(streamlit.slider("Height", 1, maxh, 704))
-    nbimg = streamlit.slider("Nb images", 1, 4, 2)
-    nbsteps = streamlit.slider("Nb steps", 1, 30, 2)
+    defw, defh = 23*64, 11*64
+    imgw = streamlit.slider("Width", 64, 2048, defw, 64) 
+    maxh = int(1024*1024 / imgw)  # limit height based on selected width
+    imgh = streamlit.slider("Height", 64, maxh, defh, 64)  
+    nbimg = streamlit.slider("Nb images", 1, 4, 1)
+    nbsteps = streamlit.slider("Nb steps", 1, 30, 1)
     seed = streamlit.number_input("Seed", 1, 1000000, 42)
 
 
@@ -42,7 +38,7 @@ pipe = load_pipeline()
 prompt = streamlit.text_input("Prompt", "A /cat|dog/ in a box")
 for p in expand(prompt):
     for i in range(nbimg):
-        streamlit.text(f"Generating image {i+1}/{nbimg} for prompt {p}, seed: {seed+i}")
+        streamlit.text(f"Generating image {i+1}/{nbimg} for prompt '{p}', seed: {seed+i}")
         generator = torch.Generator("cuda").manual_seed(seed + i)
         img = pipe(
             prompt=p,
