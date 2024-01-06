@@ -25,7 +25,7 @@ pip install -r requirements
 
 ## Run the basic stable diffusion cli
 ```sh
-python.exe .\cli_sd.py
+python.exe .\sd-cli.py
 ```
 
 ## Use in REPL
@@ -36,6 +36,18 @@ ipython.exe .\repl_sd.py
 Fooocus
 ```sh
 ipython.exe .\repl_fooocus.py
+```
+
+## Streamlit
+
+Stable diffusion xl turbo
+```sh
+python -m streamlit run .\sdxlturbo_streamlit.py
+```
+
+Stream diffusion
+```sh
+python -m streamlit run .\stream-diffusion-streamlit.py
 ```
 
 ## Notebooks
