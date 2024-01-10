@@ -14,13 +14,22 @@ deactivate
 ```
 
 ## Install
-[pytorch install on windows with cuda](https://pytorch.org/get-started/locally/#windows-package-manager)
+
+[pytorch install on windows with cuda](https://pytorch.org/get-started/locally/#windows-pip)
+
+Cuda 11:
 ```sh
-pip install -r requirements-torch-windows.txt --upgrade
+pip install -r requirements-torch-windows-cuda11.txt --upgrade
 ```
 
+Cuda 12:
 ```sh
-pip install -r requirements
+pip install -r requirements-torch-windows-cuda12.txt --upgrade
+```
+
+Other requirements:
+```sh
+pip install -r requirements.txt --upgrade
 ```
 
 ## Run the basic stable diffusion cli
