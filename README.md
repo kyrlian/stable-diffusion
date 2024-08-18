@@ -1,4 +1,4 @@
-# stable diffusion
+# stable diffusion & other image generation experiments
 
 ## Optional - venv
 
@@ -34,38 +34,38 @@ pip install -r requirements.txt --upgrade
 
 ## Run the basic stable diffusion cli
 ```sh
-python.exe .\sd-cli.py
+python.exe .\src\sd-cli.py
 ```
 
 ## Use in REPL
 Stable Diffusion
 ```sh
-ipython.exe .\repl_sd.py
+ipython.exe .\src\repl_sd.py
 ```
 Fooocus
 ```sh
-ipython.exe .\repl_fooocus.py
+ipython.exe .\src\repl_fooocus.py
 ```
 
 ## Streamlit
 
 Stable diffusion xl turbo
 ```sh
-python -m streamlit run .\sdxlturbo_streamlit.py
+python -m streamlit run .\src\sdxlturbo_streamlit.py
 ```
 
 Stream diffusion
 ```sh
-python -m streamlit run .\stream-diffusion-streamlit.py
+python -m streamlit run .\src\stream-diffusion-streamlit.py
 ```
 
 ## Notebooks
 
-See [notebooks](./notebooks/) for more complex examples.
+See [notebooks](./src/notebooks/) for more complex examples.
 
-- [stablediffusion with prompt variations](./notebooks/stablediffusion-with-prompt-variations.ipynb)
-- [stablediffusion xl](./notebooks/stablediffusion-xl.ipynb)
-- [fooocus-api](./notebooks/fooocus-api.ipynb) (get and run [foocus](https://github.com/lllyasviel/Fooocus) first)
+- [stablediffusion with prompt variations](./src/notebooks/stablediffusion-with-prompt-variations.ipynb)
+- [stablediffusion xl](./src/notebooks/stablediffusion-xl.ipynb)
+- [fooocus-api](./src/notebooks/fooocus-api.ipynb) (get and run [foocus](https://github.com/lllyasviel/Fooocus) first)
 
 ## Uninstall
 
