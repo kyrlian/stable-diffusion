@@ -49,3 +49,6 @@ for p in expand(prompt):
             height=imgh,
         ).images[0]
         streamlit.image(img, caption=p, use_column_width=False)
+
+# Run with
+# python -m streamlit run .\src\sdxlturbo_streamlit.py

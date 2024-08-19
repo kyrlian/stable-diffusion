@@ -73,4 +73,5 @@ for p in expand(prompt):
         streamlit.image(img, caption=p, use_column_width=False)
 
 
-
+# Run with
+# python -m streamlit run .\src\stream-diffusion-streamlit.py
